@@ -1,0 +1,57 @@
+@import "../../assets/mixins/mixins.scss";
+
+.container {
+    @include flexCenter();
+    width: 100%;
+    min-height: 100vh;
+    padding: 50px;
+    background: rgba(198, 221, 171, 0.579);
+    gap: 40px;
+    .card {
+        width: 40%;
+        & > div {
+            @include flColCenterStart();
+            gap: 8px;
+        }
+        .name {
+            font-size: 30px;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid rgba(198, 221, 171, 0.824);
+            margin-bottom: 10px;
+        }
+        .about {
+            @include flexCenterBetween();
+            width: 100%;
+            height: 40px;
+            padding: 5px 10px;
+            border: 1px solid rgba(198, 221, 171, 0.824);
+            .edit_input {
+                width: 40%;
+            }
+            span {
+                font-weight: 700;
+            }
+            .edit {
+                cursor: pointer;
+                transition: 0.3s;
+                &:hover {
+                    opacity: 0.5;
+                }
+            }
+        }
+        .footer {
+            @include flexBetween();
+            width: 100%;
+            padding: 8px;
+            border: 1px solid rgba(198, 221, 171, 0.824);
+        }
+        input {
+            padding: 5px;
+        }
+        .inp_btn_wrapper {
+            @include flexCenter();
+            gap: 20px;
+        }
+    }
+}

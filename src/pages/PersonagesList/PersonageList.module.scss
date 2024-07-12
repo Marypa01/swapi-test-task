@@ -1,0 +1,42 @@
+@import "../../assets/mixins/mixins.scss";
+
+.container {
+    @include flColCenterStart();
+    width: 100%;
+    min-height: 100vh;
+    padding: 50px;
+    background: rgba(198, 221, 171, 0.579);
+    gap: 40px;
+    .title {
+        font-size: 52px;
+        color: black;
+    }
+    .list_wrapper {
+        @include flexWrap();
+        justify-content: center;
+        padding: 10px;
+        gap: 20px;
+        width: 80%;
+        border-radius: 25px;
+        background: rgba(198, 221, 171, 0.279);
+        .card {
+            cursor: pointer;
+            transition: 0.3s;
+            &:hover {
+                transform: scale(1.1);
+            }
+            & > div {
+                @include flColCenterStart();
+                width: 300px;
+                gap: 8px;
+            }
+            .name {
+                font-size: 22px;
+                padding: 8px;
+                border-radius: 5px;
+                border: 1px solid rgba(198, 221, 171, 0.824);
+                margin-bottom: 10px;
+            }
+        }
+    }
+}
