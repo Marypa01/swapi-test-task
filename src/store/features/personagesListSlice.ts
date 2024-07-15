@@ -1,5 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { PersonagesListInitialStateTypes, PersonagesListResponseTypes, PersonagesListTypes } from "../types";
+import { PersonageDataKeys } from "../../pages/Personage/Personage.types";
 
 export const getPersonagesListAsync = createAsyncThunk(
     "personagesList/getPersonagesListAsync",
@@ -54,8 +55,8 @@ const personagesListSlice = createSlice({
     initialState,
     reducers: {
         setPersonageDataRedux: (
-            state,
-            action: PayloadAction<{ type: keyof Omit<PersonagesListTypes, "species" | "films" | "vehicles" | "starships">; value: string }>
+            state,       
+            action: PayloadAction<{ type: PersonageDataKeys; value: string }>
         ) => {
             state.personage[action.payload.type] = action.payload.value;
         },
@@ -82,7 +83,7 @@ const personagesListSlice = createSlice({
                 state.personagesListLoading = false;
                 state.personage = action.payload;
             })
-            .addCase(getPersonageAsync.rejected, (state, action) => {
+            .addCase(getPersonageAsync.rejected, (state) => {
                 state.personagesListLoading = false;
             });
     },

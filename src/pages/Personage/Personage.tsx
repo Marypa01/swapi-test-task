@@ -1,11 +1,11 @@
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { Card, Input, Typography } from "antd";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store";
 import { getPersonageAsync, setPersonageDataRedux } from "../../store/features/personagesListSlice";
 import styles from "./Personage.module.scss";
-import { PersonageDataTypes } from "./Personage.types";
+import { PersonageDataKeys, PersonageDataTypes } from "./Personage.types";
 import { PersonagesListTypes } from "../../store/types";
 
 const { Text } = Typography;
@@ -17,17 +17,27 @@ const Personage = () => {
 
     const { personage, personagesListLoading } = useAppSelector((state) => state.personagesList);
 
-    const { birth_year, created, edited, eye_color, gender, hair_color, height, mass, name, skin_color } = personage;
+    const { created, edited, name } = personage;
+
+    const getPersonalData = useCallback(
+        (key: PersonageDataKeys) => {
+            const storageKey = `${personageNumber}-${key}`;
+            const storageData = localStorage.getItem(storageKey);
+            return storageData ?? personage[key];
+        },
+        [personage, personageNumber]
+    );
+
 
     const personageData = useMemo<PersonageDataTypes[]>(
         () => [
-            { id: 1, key: "birth_year", text: `Birth Year: ${birth_year}`, value: birth_year },
-            { id: 4, key: "eye_color", text: `Eye Color: ${eye_color}`, value: eye_color },
-            { id: 5, key: "gender", text: `Gender: ${gender}`, value: gender },
-            { id: 6, key: "hair_color", text: `|Hair Color: ${hair_color}`, value: hair_color },
-            { id: 7, key: "height", text: `Height: ${height}`, value: height },
-            { id: 8, key: "mass", text: `Mass: ${mass}`, value: mass },
-            { id: 9, key: "skin_color", text: `Skin Color: ${skin_color}`, value: skin_color },
+            { id: 1, key: "birth_year", text: `Birth Year: ${getPersonalData("birth_year")}`, value: getPersonalData("birth_year") },
+            { id: 4, key: "eye_color", text: `Eye Color: ${getPersonalData("eye_color")}`, value: getPersonalData("eye_color") },
+            { id: 5, key: "gender", text: `Gender: ${getPersonalData("gender")}`, value: getPersonalData("gender") },
+            { id: 6, key: "hair_color", text: `Hair Color: ${getPersonalData("hair_color")}`, value: getPersonalData("hair_color") },
+            { id: 7, key: "height", text: `Height: ${getPersonalData("height")}`, value: getPersonalData("height") },
+            { id: 8, key: "mass", text: `Mass: ${getPersonalData("mass")}`, value: getPersonalData("mass") },
+            { id: 9, key: "skin_color", text: `Skin Color: ${getPersonalData("skin_color")}`, value: getPersonalData("skin_color") },
         ],
         [personage]
     );
@@ -40,8 +50,10 @@ const Personage = () => {
         setEditValue(text);
     };
 
-    const handleSaveEditedValue = (type: keyof Omit<PersonagesListTypes, "species" | "films" | "vehicles" | "starships">) => {
+    const handleSaveEditedValue = (type: PersonageDataKeys) => {
         dispatch(setPersonageDataRedux({ type, value: editValue }));
+        const storageKey = `${personageNumber}-${type}`;
+        localStorage.setItem(storageKey, editValue);
         setEditLine(null);
     };
 
@@ -72,10 +84,10 @@ const Personage = () => {
                 })}
                 <div className={styles.footer}>
                     <Text className={styles.about}>
-                        <span>created:</span> {created.split("T")[0]}
+                        <span>created:</span> {created?.split("T")[0]}
                     </Text>
                     <Text className={styles.about}>
-                        <span>edited:</span> {edited.split("T")[0]}
+                        <span>edited:</span> {edited?.split("T")[0]}
                     </Text>
                 </div>
             </Card>
